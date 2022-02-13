@@ -30,6 +30,13 @@ class _RemoteStatusIndicatorState extends State<RemoteStatusIndicator> {
       future: _fut,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
+          if (snapshot.error is MPVConnectionFailed) {
+            return const Icon(
+              Icons.play_disabled,
+              color: Colors.blueGrey,
+            );
+          }
+
           return const Icon(
             Icons.error_outline,
             color: Colors.red,
@@ -46,7 +53,7 @@ class _RemoteStatusIndicatorState extends State<RemoteStatusIndicator> {
         return const SizedBox(
           width: 24,
           height: 24,
-          child: CircularProgressIndicator(
+          child: CircularProgressIndicator.adaptive(
             strokeWidth: 2,
           ),
         );

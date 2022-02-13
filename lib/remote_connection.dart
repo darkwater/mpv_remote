@@ -118,16 +118,9 @@ class RemoteConnection {
   Future<bool> detectMpv() async {
     final conn = await connect();
 
-    try {
-      final res = await conn.execute(
-        "get_property",
-        ["mpv-version"],
-      );
+    await conn.execute("get_property", ["mpv-version"]);
 
-      return true;
-    } catch (_) {
-      return false;
-    }
+    return true;
   }
 }
 

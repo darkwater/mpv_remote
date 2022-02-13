@@ -82,6 +82,10 @@ class PropertySnapshot {
   /// Returns whether the player is paused.
   bool? get pause => data[MpvProperty.pause];
 
+  double? get videoZoom => data[MpvProperty.videoZoom];
+  double? get videoAlignX => data[MpvProperty.videoAlignX];
+  double? get videoAlignY => data[MpvProperty.videoAlignY];
+
   /// Currently played file, with path stripped. If this is an URL, try to undo
   /// percent encoding as well. (The result is not necessarily correct, but
   /// looks better for display purposes. Use the path property to get an
@@ -254,6 +258,37 @@ abstract class MpvProperty {
 
   /// Play files in random order.
   static const String shuffle = "shuffle";
+
+  /// Adjust the video display scale factor by the given value. The parameter is
+  /// given log 2. For example, --video-zoom=0 is unscaled, --video-zoom=1 is
+  /// twice the size, --video-zoom=-2 is one fourth of the size, and so on.
+  ///
+  /// This option is disabled if the --no-keepaspect option is used.
+  static const String videoZoom = "video-zoom";
+
+  /// Moves the video rectangle within the black borders, which are usually
+  /// added to pad the video to screen if video and screen aspect ratios are
+  /// different. --video-align-y=-1 would move the video to the top of the
+  /// screen (leaving a border only on the bottom), a value of 0 centers it
+  /// (default), and a value of 1 would put the video at the bottom of the
+  /// screen.
+  ///
+  /// If video and screen aspect match perfectly, these options do nothing.
+  ///
+  /// This option is disabled if the --no-keepaspect option is used.
+  static const String videoAlignY = "video-align-y";
+
+  /// Moves the video rectangle within the black borders, which are usually
+  /// added to pad the video to screen if video and screen aspect ratios are
+  /// different. --video-align-x=-1 would move the video to the left of the
+  /// screen (leaving a border only on the right), a value of 0 centers it
+  /// (default), and a value of 1 would put the video at the right of the
+  /// screen.
+  ///
+  /// If video and screen aspect match perfectly, these options do nothing.
+  ///
+  /// This option is disabled if the --no-keepaspect option is used.
+  static const String videoAlignX = "video-align-x";
 
   // ↑ options | properties ↓
 
@@ -467,7 +502,6 @@ abstract class MpvProperty {
   static const String displayWidth = "display-width";
   static const String displayHeight = "display-height";
   static const String displayHidpiScale = "display-hidpi-scale";
-  static const String videoAspect = "video-aspect";
   static const String osdWidth = "osd-width";
   static const String osdHeight = "osd-height";
   static const String osdPar = "osd-par";

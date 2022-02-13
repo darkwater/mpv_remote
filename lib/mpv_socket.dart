@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:mpv_remote/remote_connection.dart';
+
 class MpvSocket {
   MpvSocket(this.stdin, this.stdout) {
     execute("disable_event", ["all"]);
@@ -26,13 +28,19 @@ class MpvSocket {
     final bytes = Uint8List.fromList(utf8.encode(data));
     stdin.add(bytes);
 
-    final res = await stdout.firstWhere((event) => event["request_id"] == id);
+    try {
+      final res = await stdout.firstWhere((event) => event["request_id"] == id);
 
-    if (res["error"] != "success") {
-      throw Exception(res["error"]);
+      if (res["error"] != "success") {
+        throw Exception(res["error"]);
+      }
+
+      return res["data"] as T;
+    } on StateError {
+      throw MPVConnectionFailed();
+    } catch (_) {
+      rethrow;
     }
-
-    return res["data"] as T;
   }
 
   Future<T> getProperty<T>(String name) async {
@@ -186,4 +194,8 @@ class MpvSocket {
   set audioDevice(String v) => setProperty("audio-device", v);
 
   set pause(bool v) => setProperty("pause", v);
+
+  set videoZoom(double v) => setProperty("video-zoom", v);
+  set videoAlignX(double v) => setProperty("video-align-x", v);
+  set videoAlignY(double v) => setProperty("video-align-y", v);
 }

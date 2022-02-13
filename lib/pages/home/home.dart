@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mpv_remote/pages/home/more/more.dart';
 import 'package:mpv_remote/pages/home/tracks/tracks.dart';
 import 'package:mpv_remote/widgets/remote_app_bar_title.dart';
 
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     _Page("Controls", Icons.play_arrow, () => const Controls()),
     _Page("Playlist", Icons.playlist_play, () => const Playlist()),
     _Page("Tracks", Icons.art_track, () => const Tracks()),
+    _Page("More", Icons.more_horiz, () => const More()),
   ];
 
   @override
