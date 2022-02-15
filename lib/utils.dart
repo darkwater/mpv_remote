@@ -1,4 +1,7 @@
 String formatSeconds(double seconds) {
+  bool negative = seconds < 0;
+  seconds = seconds.abs();
+
   int sec = seconds.floor();
 
   int hours = sec ~/ 3600;
@@ -9,12 +12,14 @@ String formatSeconds(double seconds) {
   String minutesStr = minutes.toString();
   String secsStr = secs.toString();
 
-  if (minutes < 10) minutesStr = '0' + minutesStr;
-  if (secs < 10) secsStr = '0' + secsStr;
+  if (minutes < 10) minutesStr = "0" + minutesStr;
+  if (secs < 10) secsStr = "0" + secsStr;
+
+  final sign = negative ? "-" : "";
 
   if (hours == 0) {
-    return '$minutesStr:$secsStr';
+    return "$sign$minutesStr:$secsStr";
   } else {
-    return '$hoursStr:$minutesStr:$secsStr';
+    return "$sign$hoursStr:$minutesStr:$secsStr";
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mpv_remote/mpv_socket.dart';
@@ -43,11 +43,17 @@ class SecondHalf extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 mainAxisSize: MainAxisSize.max,
-                children: const [
-                  _SeekButton(-60),
-                  _SeekButton(-10),
-                  _SeekButton(10),
-                  _SeekButton(60),
+                children: [
+                  TextButton(
+                    child: const Icon(Icons.first_page),
+                    onPressed: () {
+                      context.read<MpvSocket>().timePos = 0;
+                    },
+                  ),
+                  const _SeekButton(-60),
+                  const _SeekButton(-10),
+                  const _SeekButton(10),
+                  const _SeekButton(60),
                 ],
               ),
               SizedBox(
@@ -67,7 +73,7 @@ class SecondHalf extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.fast_rewind),
                       iconSize: 42,
-                      onPressed: (chapter == 0)
+                      onPressed: (chapter <= 0)
                           ? null
                           : () =>
                               context.read<MpvSocket>().chapter = chapter - 1,
@@ -197,6 +203,7 @@ class SeekComponent extends StatelessWidget {
                 height: 24,
                 child: Slider(
                   value: props.timePos ?? 0,
+                  min: min(0, props.timePos ?? 0),
                   max: (props.timeRemaining ?? 0) + (props.timePos ?? 0),
                   onChanged: (props.seekable != false)
                       ? (v) => context.read<MpvSocket>().timePos = v
