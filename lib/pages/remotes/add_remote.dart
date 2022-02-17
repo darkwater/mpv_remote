@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mpv_remote/remote_connection.dart';
 import 'package:mpv_remote/secure_storage.dart';
-import 'package:mpv_remote/storage.dart';
+import 'package:mpv_remote/preferences.dart';
 import 'package:mpv_remote/widgets/async_button.dart';
 
 class AddRemotePage extends StatefulWidget {
@@ -263,7 +263,10 @@ class _AddRemotePageState extends State<AddRemotePage> {
   void _submitForm() async {
     final remote = _readForm();
     if (remote != null) {
-      await Storage.addRemoteConnection(remote);
+      final remotes = await Preferences.remoteConnections.first;
+      remotes.add(remote);
+      Preferences.remoteConnections.setValue(remotes);
+
       await _savePassword();
 
       _keepPassword = true;

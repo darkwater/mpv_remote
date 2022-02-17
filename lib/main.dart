@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 
 import 'mpv_socket.dart';
 import 'pages/home/home.dart';
+import 'pages/loading.dart';
 import 'pages/remotes/remotes.dart';
 import 'remote_connection.dart';
-import 'storage.dart';
+import 'preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Storage.init();
+  await Preferences.init();
 
   runApp(MultiProvider(
     providers: [
@@ -46,41 +47,34 @@ class MyApp extends StatelessWidget {
       ),
       home: Consumer<RemoteConnectionSelection>(
         builder: (context, connection, _) {
-          print("REBUILDING");
           if (connection.value != null) {
             return FutureBuilder<MpvSocket>(
-                future: connection.value!.connect(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return MultiProvider(
-                      providers: [
-                        Provider<MpvSocket>.value(value: snapshot.data!),
-                        Provider<RemoteConnection>.value(
-                          value: connection.value!,
-                        ),
-                      ],
-                      child: Navigator(
-                        key: ValueKey(connection.value!.id),
-                        onGenerateRoute: (settings) {
-                          if (settings.name == "/") {
-                            return HomePage.route();
-                          }
+              future: connection.value!.connect(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return MultiProvider(
+                    providers: [
+                      Provider<MpvSocket>.value(value: snapshot.data!),
+                      Provider<RemoteConnection>.value(
+                        value: connection.value!,
+                      ),
+                    ],
+                    child: Navigator(
+                      key: ValueKey(connection.value!.id),
+                      onGenerateRoute: (settings) {
+                        if (settings.name == "/") {
+                          return HomePage.route();
+                        }
 
-                          return null;
-                        },
-                      ),
-                    );
-                  } else {
-                    return Scaffold(
-                      appBar: AppBar(
-                        title: Text(connection.value!.label),
-                      ),
-                      body: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                });
+                        return null;
+                      },
+                    ),
+                  );
+                } else {
+                  return const LoadingPage();
+                }
+              },
+            );
           } else {
             return const RemotesPage();
           }

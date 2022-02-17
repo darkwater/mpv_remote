@@ -37,9 +37,9 @@ class _RemoteStatusIndicatorState extends State<RemoteStatusIndicator> {
             );
           }
 
-          return const Icon(
+          return Icon(
             Icons.error_outline,
-            color: Colors.red,
+            color: Theme.of(context).errorColor,
           );
         }
 

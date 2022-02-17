@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mpv_remote/mpv_socket.dart';
 import 'package:mpv_remote/pages/home/controls/chapter_list.dart';
-import 'package:mpv_remote/storage.dart';
+import 'package:mpv_remote/preferences.dart';
 import 'package:mpv_remote/utils.dart';
 import 'package:mpv_remote/widgets/property_builder.dart';
 import 'package:provider/provider.dart';
@@ -231,7 +231,7 @@ class _TimeProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PreferenceBuilder<bool>(
-      preference: Storage.showPercentPos,
+      preference: Preferences.showPercentPos,
       builder: (context, showPercentPos) {
         final timePos = this.timePos ?? 0;
 
@@ -248,7 +248,7 @@ class _TimeProgress extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Storage.showPercentPos.setValue(!showPercentPos);
+            Preferences.showPercentPos.setValue(!showPercentPos);
           },
         );
       },
@@ -269,7 +269,7 @@ class _TimeRemaining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PreferenceBuilder<bool>(
-      preference: Storage.showRemainingTime,
+      preference: Preferences.showRemainingTime,
       builder: (context, showRemainingTime) {
         return TextButton(
           child: SizedBox(
@@ -284,7 +284,7 @@ class _TimeRemaining extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Storage.showRemainingTime.setValue(!showRemainingTime);
+            Preferences.showRemainingTime.setValue(!showRemainingTime);
           },
         );
       },
