@@ -69,23 +69,33 @@ class RemoteConnection {
 
     printOut.add("connection successful.");
 
-    final session = await client.execute("which socat");
+    late final SSHSession session;
+    late final String util;
+
+    if (client.remoteVersion?.contains("Windows") ?? false) {
+      printOut.add("Windows detected.");
+      util = "npiperelay";
+      session = await client.execute("where.exe $util.exe");
+    } else {
+      util = "socat";
+      session = await client.execute("which $util");
+    }
     session.stdin.close();
 
     await session.stdout.listen((bytes) {
       for (final line in utf8.decode(bytes).trim().split("\n")) {
-        printOut.add("which: $line");
+        printOut.add("$util found: $line");
       }
     }).asFuture();
 
     await session.done;
 
     if (session.exitCode == 0) {
-      printOut.add("`socat` found.");
+      printOut.add("`$util` found.");
       printOut.add("test successful.");
       return true;
     } else {
-      printOut.add("`socat` not found.");
+      printOut.add("`$util` not found.");
       printOut.add("test failed.");
       return false;
     }
@@ -101,7 +111,8 @@ class RemoteConnection {
 
     await client.authenticated;
 
-    final session = await client.execute("socat - $socketPath");
+    final session = await client.execute(
+        "${client.remoteVersion?.contains("Windows") ?? false ? "npiperelay.exe" : "socat -"} $socketPath");
 
     // stdin and stdout are newline-separated JSON objects
     return MpvSocket(
