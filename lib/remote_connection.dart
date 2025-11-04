@@ -58,10 +58,12 @@ class RemoteConnection {
 
   Future<bool> testConnection(Sink<String> printOut) async {
     final socket = await SSHSocket.connect(host, port);
+    final privateKey = await SecureStorage.getPrivateKeyById(id);
     final client = SSHClient(
       socket,
       username: username,
       onPasswordRequest: _getPassword,
+      identities: privateKey == null ? null : SSHKeyPair.fromPem(privateKey),
       printDebug: (s) => printOut.add(s ?? ""),
     );
 
@@ -93,10 +95,12 @@ class RemoteConnection {
 
   Future<MpvSocket> connect() async {
     final socket = await SSHSocket.connect(host, port);
+    final privateKey = await SecureStorage.getPrivateKeyById(id);
     final client = SSHClient(
       socket,
       username: username,
       onPasswordRequest: _getPassword,
+      identities: privateKey == null ? null : SSHKeyPair.fromPem(privateKey),
     );
 
     await client.authenticated;

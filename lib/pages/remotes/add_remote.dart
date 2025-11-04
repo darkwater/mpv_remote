@@ -27,10 +27,12 @@ class _AddRemotePageState extends State<AddRemotePage> {
   final _portController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _privateKeyController = TextEditingController();
   final _socketPathController = TextEditingController();
 
   late final String _id;
   bool _keepPassword = false;
+  bool _keepPrivateKey = false;
 
   static const _defaultPort = "22";
   static const _defaultSocketPath = "/tmp/mpvsocket";
@@ -51,10 +53,15 @@ class _AddRemotePageState extends State<AddRemotePage> {
     _portController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _privateKeyController.dispose();
     _socketPathController.dispose();
 
     if (!_keepPassword) {
       _deletePassword();
+    }
+
+    if (!_keepPrivateKey) {
+      _deletePrivateKey();
     }
 
     super.dispose();
@@ -125,6 +132,11 @@ class _AddRemotePageState extends State<AddRemotePage> {
                 ),
                 _Field(_passwordController, "Password", password: true),
                 _Field(
+                  _privateKeyController,
+                  "Private Key",
+                  privateKey: true,
+                ),
+                _Field(
                   _socketPathController,
                   "Socket path",
                   defaultValue: _defaultSocketPath,
@@ -191,8 +203,17 @@ class _AddRemotePageState extends State<AddRemotePage> {
     SecureStorage.savePassword(_id, password);
   }
 
+  Future<void> _savePrivateKey() async {
+    final privateKey = _privateKeyController.text;
+    SecureStorage.savePrivateKey(_id, privateKey);
+  }
+
   Future<void> _deletePassword() async {
     SecureStorage.deletePassword(_id);
+  }
+
+  Future<void> _deletePrivateKey() async {
+    SecureStorage.deletePrivateKey(_id);
   }
 
   Future<bool> _testConnection() async {
@@ -208,6 +229,7 @@ class _AddRemotePageState extends State<AddRemotePage> {
     });
 
     await _savePassword();
+    await _savePrivateKey();
 
     final sc = StreamController<String>();
     sc.stream.listen((line) {
@@ -268,8 +290,10 @@ class _AddRemotePageState extends State<AddRemotePage> {
       Preferences.remoteConnections.setValue(remotes);
 
       await _savePassword();
+      await _savePrivateKey();
 
       _keepPassword = true;
+      _keepPrivateKey = true;
       Navigator.pop(context);
     }
   }
@@ -284,6 +308,7 @@ class _Field extends StatefulWidget {
     this.urlKeyboard = false,
     this.portNumber = false,
     this.password = false,
+    this.privateKey = false,
     Key? key,
   }) : super(key: key);
 
@@ -294,6 +319,7 @@ class _Field extends StatefulWidget {
   final bool urlKeyboard;
   final bool portNumber;
   final bool password;
+  final bool privateKey;
 
   @override
   State<_Field> createState() => _FieldState();
@@ -305,6 +331,7 @@ class _FieldState extends State<_Field> {
   @override
   Widget build(BuildContext context) {
     final field = TextFormField(
+      maxLines: widget.privateKey ? null : 1,
       controller: widget.controller,
       textInputAction: TextInputAction.next,
       obscureText: widget.password && !showPassword,
@@ -314,7 +341,9 @@ class _FieldState extends State<_Field> {
               ? TextInputType.url
               : (widget.password && showPassword)
                   ? TextInputType.visiblePassword
-                  : TextInputType.text,
+                  : widget.privateKey
+                      ? TextInputType.multiline
+                      : TextInputType.text,
       decoration: InputDecoration(
         alignLabelWithHint: true,
         floatingLabelBehavior: (widget.defaultValue != null)
