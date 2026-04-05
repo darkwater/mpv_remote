@@ -3,7 +3,7 @@ import 'package:mpv_remote/remote_connection.dart';
 import 'package:mpv_remote/preferences.dart';
 import 'package:mpv_remote/widgets/remote_status_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:mpv_remote/prefs.dart';
 
 import 'add_remote.dart';
 
@@ -48,7 +48,7 @@ class _RemotesPageState extends State<RemotesPage> {
                   ),
                   direction: DismissDirection.endToStart,
                   background: Container(
-                    color: Theme.of(context).errorColor,
+                    color: Theme.of(context).colorScheme.error,
                     child: const Align(
                       alignment: AlignmentDirectional.centerEnd,
                       child: Padding(

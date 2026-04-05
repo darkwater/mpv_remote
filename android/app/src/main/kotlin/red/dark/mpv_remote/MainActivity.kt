@@ -1,4 +1,4 @@
-package com.example.mpv_remote
+package red.dark.mpv_remote
 
 import io.flutter.embedding.android.FlutterActivity
 

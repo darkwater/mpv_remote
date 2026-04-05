@@ -1,31 +1,27 @@
+import 'package:mpv_remote/prefs.dart';
 import 'package:mpv_remote/remote_connection.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class Preferences {
   static late StreamingSharedPreferences _prefs;
 
+  static late final Preference<List<RemoteConnection>> remoteConnections;
+  static late final Preference<bool> showPercentPos;
+  static late final Preference<bool> showRemainingTime;
+
   static Future<void> init() async {
     _prefs = await StreamingSharedPreferences.instance;
-  }
-
-  static Preference<List<RemoteConnection>> get remoteConnections {
-    return _prefs.getCustomValue(
+    remoteConnections = _prefs.getCustomValue(
       "remoteConnections",
       defaultValue: [],
       adapter: _remoteConnectionAdapter,
     );
-  }
-
-  static Preference<bool> get showPercentPos {
-    return _prefs.getBool("showPercentPos", defaultValue: true);
-  }
-
-  static Preference<bool> get showRemainingTime {
-    return _prefs.getBool("showRemainingTime", defaultValue: true);
+    showPercentPos = _prefs.getBool("showPercentPos", defaultValue: true);
+    showRemainingTime =
+        _prefs.getBool("showRemainingTime", defaultValue: true);
   }
 }
 
-final _remoteConnectionAdapter = JsonAdapter(
+final _remoteConnectionAdapter = JsonAdapter<List<RemoteConnection>>(
   serializer: (value) => value.map((e) => e.toJson()).toList(),
   deserializer: (value) => (value as List<dynamic>)
       .map((e) => RemoteConnection.fromJson(e))

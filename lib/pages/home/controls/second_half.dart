@@ -7,7 +7,7 @@ import 'package:mpv_remote/preferences.dart';
 import 'package:mpv_remote/utils.dart';
 import 'package:mpv_remote/widgets/property_builder.dart';
 import 'package:provider/provider.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:mpv_remote/prefs.dart';
 
 class SecondHalf extends StatelessWidget {
   const SecondHalf({Key? key}) : super(key: key);
