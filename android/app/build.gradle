@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "red.dark.mpv_remote"
-    compileSdkVersion 35
+    compileSdkVersion 36
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
