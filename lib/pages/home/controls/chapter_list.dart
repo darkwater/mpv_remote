@@ -31,7 +31,7 @@ class ChapterListView extends StatelessWidget {
                 child: ListTile(
                   title: Text(
                     "No chapters",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                 ),

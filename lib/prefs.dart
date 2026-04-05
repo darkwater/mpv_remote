@@ -89,6 +89,11 @@ class Preference<T> {
       await _prefs.setDouble(_key, value);
     } else if (value is String) {
       await _prefs.setString(_key, value);
+    } else {
+      throw UnsupportedError(
+        'Unsupported preference value type ${value.runtimeType} for key "$_key". '
+        'Use bool, int, double, or String, or provide a JsonAdapter.',
+      );
     }
     _subject.add(value);
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mpv_remote/remote_connection.dart';
-import 'package:provider/provider.dart';
 
 class RemoteStatusIndicator extends StatefulWidget {
   const RemoteStatusIndicator(
