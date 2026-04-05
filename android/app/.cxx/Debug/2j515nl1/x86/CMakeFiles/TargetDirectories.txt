@@ -1,0 +1,2 @@
+/home/runner/work/mpv_remote/mpv_remote/android/app/.cxx/Debug/2j515nl1/x86/CMakeFiles/edit_cache.dir
+/home/runner/work/mpv_remote/mpv_remote/android/app/.cxx/Debug/2j515nl1/x86/CMakeFiles/rebuild_cache.dir
