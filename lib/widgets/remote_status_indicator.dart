@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mpv_remote/remote_connection.dart';
-import 'package:provider/provider.dart';
 
 class RemoteStatusIndicator extends StatefulWidget {
   const RemoteStatusIndicator(
@@ -39,7 +38,7 @@ class _RemoteStatusIndicatorState extends State<RemoteStatusIndicator> {
 
           return Icon(
             Icons.error_outline,
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).colorScheme.error,
           );
         }
 
